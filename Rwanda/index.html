@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rwanda FfD Scorecard 2025</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f1923;
+    --paper: #f5f0e8;
+    --paper2: #ede8df;
+    --accent: #c8473a;
+    --gold: #c9a227;
+    --green: #2a6b3c;
+    --blue: #1a4a7a;
+    --teal: #1a6b6b;
+    --orange: #b85c1a;
+    --purple: #5a2a7a;
+    --indigo: #34407a;
+    --muted: #6b6555;
+    --border: #cdc5b2;
+
+    --score1: #c0392b;
+    --score2: #e67e22;
+    --score3: #f1c40f;
+    --score4: #27ae60;
+    --score5: #1a7a4a;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+  /* ── COVER ─────────────────────────────── */
+  .cover {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 56px 48px 48px;
+    position: relative;
+    overflow: hidden;
+  }
+  .cover::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,161,222,0.18) 0%, transparent 70%);
+  }
+  .cover-flag {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 28px;
+  }
+  .flag-rw {
+    width: 48px; height: 32px;
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+    display: flex; flex-direction: column;
+    flex-shrink: 0;
+  }
+  .flag-rw .band-blue  { height: 50%; background: #00a1de; }
+  .flag-rw .band-yellow{ height: 25%; background: #fad201; }
+  .flag-rw .band-green { height: 25%; background: #20603d; }
+  .flag-rw .sun {
+    position: absolute;
+    top: 6px; right: 6px;
+    width: 9px; height: 9px;
+    background: #e5be01;
+    border-radius: 50%;
+    box-shadow: 0 0 0 1.5px #e5be01;
+  }
+  .cover-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.55);
+  }
+  .cover-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 5vw, 52px);
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 8px;
+  }
+  .cover-title span { color: #00a1de; }
+  .cover-sub {
+    font-size: 15px;
+    color: rgba(245,240,232,0.7);
+    font-weight: 300;
+    margin-bottom: 32px;
+  }
+  .cover-meta {
+    display: flex; gap: 32px; flex-wrap: wrap;
+  }
+  .cover-meta-item {
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .cover-meta-item .label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: rgba(245,240,232,0.45);
+    text-transform: uppercase;
+  }
+  .cover-meta-item .value {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--paper);
+  }
+
+  /* ── OVERALL SCORE BAR ───────────────────── */
+  .score-banner {
+    background: var(--ink);
+    padding: 0 48px 40px;
+    display: flex; align-items: flex-end; gap: 40px; flex-wrap: wrap;
+  }
+  .overall-score-ring { position: relative; flex-shrink: 0; }
+  .overall-score-ring svg { display: block; }
+  .ring-inner {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+  .ring-inner .num {
+    font-family: 'Playfair Display', serif;
+    font-size: 38px;
+    font-weight: 900;
+    color: var(--paper);
+    line-height: 1;
+  }
+  .ring-inner .denom { font-size: 13px; color: rgba(245,240,232,0.45); }
+  .ring-inner .rating {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+  .pillar-scores { flex: 1; display: flex; flex-direction: column; gap: 10px; min-width: 280px; }
+  .pillar-bar-row { display: flex; align-items: center; gap: 12px; }
+  .pillar-bar-label {
+    font-size: 11px; font-weight: 500;
+    color: rgba(245,240,232,0.7);
+    width: 200px; flex-shrink: 0;
+  }
+  .pillar-bar-track {
+    flex: 1; height: 8px;
+    background: rgba(245,240,232,0.12);
+    border-radius: 4px; overflow: hidden;
+  }
+  .pillar-bar-fill { height: 100%; border-radius: 4px; transition: width 1.2s cubic-bezier(.4,0,.2,1); }
+  .pillar-bar-val {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px; font-weight: 500;
+    color: var(--paper); width: 36px; text-align: right;
+  }
+
+  /* ── CONTEXT STRIP ───────────────────────── */
+  .context-strip {
+    background: var(--gold);
+    padding: 14px 48px;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .context-strip .icon { font-size: 18px; }
+  .context-strip p { font-size: 13px; font-weight: 500; color: var(--ink); line-height: 1.5; }
+  .context-strip strong { font-weight: 700; }
+
+  /* ── MAIN CONTENT ────────────────────────── */
+  .main { padding: 40px 48px; max-width: 1200px; margin: 0 auto; }
+
+  /* ── SECTION HEADER ──────────────────────── */
+  .section-header {
+    display: flex; align-items: center; gap: 16px;
+    margin-bottom: 8px; margin-top: 40px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--border);
+  }
+  .section-header:first-child { margin-top: 0; }
+  .section-dot { width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; }
+  .section-header h2 { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; }
+  .section-header .score-chip {
+    margin-left: auto;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px; font-weight: 500;
+    padding: 4px 14px; border-radius: 20px;
+    background: var(--ink); color: var(--paper);
+  }
+  .pillar-note {
+    font-size: 11.5px; color: var(--muted);
+    line-height: 1.5; margin-bottom: 20px;
+    padding: 8px 12px; background: var(--paper2);
+    border-left: 3px solid var(--border); border-radius: 0 6px 6px 0;
+  }
+  .pillar-note strong { color: var(--ink); }
+
+  /* ── INDICATOR CARDS ─────────────────────── */
+  .indicators-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 16px; margin-bottom: 8px;
+  }
+  .card {
+    background: white; border-radius: 12px; padding: 20px;
+    border: 1.5px solid var(--border);
+    position: relative; overflow: hidden;
+    transition: box-shadow 0.2s, transform 0.2s;
+  }
+  .card:hover { box-shadow: 0 8px 24px rgba(15,25,35,0.1); transform: translateY(-2px); }
+  .card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; }
+
+  .card-sub {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; letter-spacing: 1.5px;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 6px;
+  }
+  .card-title { font-size: 13.5px; font-weight: 600; line-height: 1.4; margin-bottom: 14px; color: var(--ink); }
+  .card-values { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 12px; }
+  .card-current { display: flex; flex-direction: column; gap: 2px; }
+  .card-current .label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+  .card-current .value { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; line-height: 1; }
+  .card-current .unit { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .card-score-badge {
+    width: 44px; height: 44px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 900;
+    color: white; flex-shrink: 0;
+  }
+  .card-benchmark {
+    background: var(--paper); border-radius: 6px; padding: 7px 10px;
+    font-size: 11.5px; color: var(--muted); line-height: 1.4; margin-bottom: 10px;
+  }
+  .card-benchmark strong { color: var(--ink); font-weight: 600; }
+  .card-trend { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--muted); margin-bottom: 10px; }
+  .trend-arrow { font-size: 14px; }
+  .trend-up { color: var(--green); }
+  .trend-down { color: var(--score1); }
+  .trend-flat { color: var(--orange); }
+  .card-conversation {
+    background: #fffbf0; border: 1px dashed var(--gold); border-radius: 6px;
+    padding: 8px 10px; font-size: 11.5px; color: #7a5c00; line-height: 1.5;
+  }
+  .card-conversation::before { content: '💬 '; }
+  .card-source { margin-top: 10px; display: flex; align-items: center; gap: 6px; }
+  .card-source a { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--blue); text-decoration: none; letter-spacing: 0.5px; }
+  .card-source a:hover { text-decoration: underline; }
+  .card-source span.src { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 0.5px; }
+
+  /* Score colours */
+  .s1 { background: var(--score1); }
+  .s2 { background: var(--score2); }
+  .s3 { background: var(--score3); color: var(--ink) !important; }
+  .s4 { background: var(--score4); }
+  .s5 { background: var(--score5); }
+  .sq { background: var(--muted); font-size: 12px !important; }
+  .border1::before { background: var(--score1); }
+  .border2::before { background: var(--score2); }
+  .border3::before { background: var(--score3); }
+  .border4::before { background: var(--score4); }
+  .border5::before { background: var(--score5); }
+
+  /* Pillar section colours */
+  .dot-flows { background: var(--green); }
+  .dot-exp   { background: var(--orange); }
+  .dot-eff   { background: var(--purple); }
+  .dot-env   { background: var(--teal); }
+  .dot-fin   { background: var(--indigo); }
+
+  /* ── DATA GAP CARD ───────────────────────── */
+  .card.gap {
+    background: repeating-linear-gradient(45deg, #fafafa, #fafafa 10px, #f2f0ea 10px, #f2f0ea 20px);
+    border: 1.5px dashed #b7ae98;
+  }
+  .card.gap::before { background: #b7ae98; }
+  .card.gap .card-title { color: #5a5445; }
+  .gap-chip {
+    display: inline-block;
+    font-family: 'DM Mono', monospace; font-size: 9.5px; letter-spacing: 1.5px;
+    text-transform: uppercase; color: #7a725a;
+    background: #ece4d2; border: 1px solid #d8cfb8;
+    padding: 3px 8px; border-radius: 4px; margin-bottom: 10px;
+  }
+  .gap-body { font-size: 11.5px; color: #5f5947; line-height: 1.55; margin-bottom: 8px; }
+  .gap-body strong { color: #3f3a2c; }
+  .gap-need {
+    font-size: 10.5px; color: #8a8168; line-height: 1.45;
+    border-top: 1px dotted #cdc5b2; padding-top: 8px; margin-top: 4px;
+  }
+  .gap-need::before { content: '⌦ needs: '; font-family: 'DM Mono', monospace; letter-spacing: 0.5px; }
+
+  /* ── KEY FINDINGS ─────────────────────────── */
+  .findings-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px; margin-bottom: 40px;
+  }
+  .finding-card { background: var(--ink); color: var(--paper); border-radius: 12px; padding: 22px; }
+  .finding-card .finding-icon { font-size: 24px; margin-bottom: 10px; }
+  .finding-card h4 { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 700; margin-bottom: 8px; color: var(--gold); }
+  .finding-card p { font-size: 12.5px; line-height: 1.6; color: rgba(245,240,232,0.8); }
+
+  /* ── SCORE LEGEND ─────────────────────────── */
+  .legend { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 32px; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 11.5px; color: var(--muted); }
+  .legend-dot { width: 12px; height: 12px; border-radius: 50%; }
+
+  /* ── FOOTER ───────────────────────────────── */
+  .footer { background: var(--ink); color: rgba(245,240,232,0.5); padding: 24px 48px; font-size: 11px; line-height: 1.6; margin-top: 48px; }
+  .footer strong { color: rgba(245,240,232,0.8); }
+
+  @media (max-width: 640px) {
+    .cover, .main, .score-banner { padding-left: 24px; padding-right: 24px; }
+    .pillar-bar-label { width: 130px; font-size: 10px; }
+    .context-strip { padding-left: 24px; padding-right: 24px; }
+    .indicators-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-flag">
+    <div class="flag-rw">
+      <div class="band-blue"></div>
+      <div class="band-yellow"></div>
+      <div class="band-green"></div>
+      <div class="sun"></div>
+    </div>
+    <span class="cover-label">Financing for Development</span>
+  </div>
+  <div class="cover-title">Rwanda<br><span>FfD Scorecard</span></div>
+  <div class="cover-sub">Country-Level Assessment · Conversation Starter for Donors &amp; Government</div>
+  <div class="cover-meta">
+    <div class="cover-meta-item">
+      <span class="label">Reference Period</span>
+      <span class="value">FY2024/25</span>
+    </div>
+    <div class="cover-meta-item">
+      <span class="label">GDP (Nominal, 2024)</span>
+      <span class="value">~$15.1bn USD</span>
+    </div>
+    <div class="cover-meta-item">
+      <span class="label">Population (2024)</span>
+      <span class="value">13.9 million</span>
+    </div>
+    <div class="cover-meta-item">
+      <span class="label">Real GDP Growth (2024)</span>
+      <span class="value">7.2% (rebased)</span>
+    </div>
+    <div class="cover-meta-item">
+      <span class="label">IMF Engagement</span>
+      <span class="value">PCI 2022–25 completed</span>
+    </div>
+  </div>
+</div>
+
+<!-- SCORE BANNER -->
+<div class="score-banner">
+  <div class="overall-score-ring">
+    <svg width="130" height="130" viewBox="0 0 130 130">
+      <circle cx="65" cy="65" r="56" fill="none" stroke="rgba(245,240,232,0.1)" stroke-width="10"></circle>
+      <circle cx="65" cy="65" r="56" fill="none" stroke="#c9a227" stroke-width="10" stroke-dasharray="351.9" stroke-dashoffset="98.5" stroke-linecap="round" transform="rotate(-90 65 65)"></circle>
+    </svg>
+    <div class="ring-inner">
+      <div class="num">3.6</div>
+      <div class="denom">out of 5</div>
+      <div class="rating">Provisional</div>
+    </div>
+  </div>
+
+  <div class="pillar-scores">
+    <div class="pillar-bar-row">
+      <span class="pillar-bar-label">I. Flows</span>
+      <div class="pillar-bar-track"><div class="pillar-bar-fill" style="width:64%;background:#2a6b3c;"></div></div>
+      <span class="pillar-bar-val">3.2</span>
+    </div>
+    <div class="pillar-bar-row">
+      <span class="pillar-bar-label">II. Expenditure</span>
+      <div class="pillar-bar-track"><div class="pillar-bar-fill" style="width:66%;background:#b85c1a;"></div></div>
+      <span class="pillar-bar-val">3.3</span>
+    </div>
+    <div class="pillar-bar-row">
+      <span class="pillar-bar-label">III. Spending Effectiveness</span>
+      <div class="pillar-bar-track"><div class="pillar-bar-fill" style="width:80%;background:#5a2a7a;"></div></div>
+      <span class="pillar-bar-val">4.0</span>
+    </div>
+    <div class="pillar-bar-row">
+      <span class="pillar-bar-label">IV. Enabling Environment</span>
+      <div class="pillar-bar-track"><div class="pillar-bar-fill" style="width:70%;background:#1a6b6b;"></div></div>
+      <span class="pillar-bar-val">3.5</span>
+    </div>
+    <div class="pillar-bar-row">
+      <span class="pillar-bar-label">V. Fin. Market Diagnostics</span>
+      <div class="pillar-bar-track"><div class="pillar-bar-fill" style="width:80%;background:#34407a;"></div></div>
+      <span class="pillar-bar-val">4.0</span>
+    </div>
+  </div>
+</div>
+
+<!-- CONTEXT STRIP -->
+<div class="context-strip">
+  <span class="icon">⚠️</span>
+  <p><strong>Ambition-vs-Buffers Moment:</strong> Rwanda combines strong growth (7.2%), sound institutions and a well-capitalised banking system with rising debt and a wide external gap. Financing of the New Kigali International Airport (NKIA) &amp; RwandAir is set to push public debt from 75% (2025) toward ~80% of GDP by 2027, against a current-account deficit near 13% of GDP and eroding policy buffers. Debt is at moderate risk of distress.</p>
+</div>
+
+<div class="main">
+
+  <!-- LEGEND -->
+  <div class="legend">
+    <span style="font-size:11.5px;font-weight:600;color:var(--ink);margin-right:6px;">Score:</span>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--score1)"></div>1 – Critical</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--score2)"></div>2 – Weak</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--score3)"></div>3 – Moderate</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--score4)"></div>4 – Good</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--score5)"></div>5 – Strong</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#b7ae98;border:1px dashed #8a8168"></div>Data gap</div>
+    <span style="font-size:11px;color:var(--muted);margin-left:12px;">💬 = Conversation starter for donor / government dialogue</span>
+  </div>
+
+  <!-- DATA COMPLETENESS NOTE -->
+  <div class="pillar-note" style="margin-bottom:32px;border-left-color:var(--accent);">
+    <strong>Data completeness:</strong> 24 of 25 indicators carry a directly-sourced 1–5 score. The only unscored indicator is the INFF (a qualitative status, shown as a narrative card). Pillar and overall averages exclude it. The overall score is marked <strong>Provisional</strong> because PEFA is a qualitative read pending indicator-level conversion.
+  </div>
+
+  <!-- KEY FINDINGS -->
+  <div class="findings-grid">
+    <div class="finding-card">
+      <div class="finding-icon">🟢</div>
+      <h4>Institutional Strength</h4>
+      <p>CPI at a record 57/100 (2024, top-3 in Sub-Saharan Africa) and the region's best B-READY business-environment scores signal governance well above Rwanda's income level.</p>
+    </div>
+    <div class="finding-card">
+      <div class="finding-icon">🟠</div>
+      <h4>Debt &amp; Buffer Squeeze</h4>
+      <p>Public debt ~75% of GDP and rising toward ~80% by 2027 on NKIA airport financing, with a current-account deficit near 13% of GDP. Moderate risk of debt distress.</p>
+    </div>
+    <div class="finding-card">
+      <div class="finding-icon">🟢</div>
+      <h4>Sound but Shallow Banks</h4>
+      <p>NPLs just 2.6% and capital adequacy ~22% — a resilient, deposit-funded system. But financial markets stay shallow (thin FX interbank market, constrained SME credit).</p>
+    </div>
+    <div class="finding-card">
+      <div class="finding-icon">🟡</div>
+      <h4>Revenue &amp; Data Gaps</h4>
+      <p>Tax/GDP at 14.2%; new compensatory &amp; comprehensive tax packages aim to add ~1pp by FY29/30. Several social-spending &amp; market-depth indicators remain unfilled data gaps.</p>
+    </div>
+  </div>
+
+  <!-- PILLAR I: FLOWS -->
+  <div class="section-header">
+    <div class="section-dot dot-flows"></div>
+    <h2>Pillar I — Flows</h2>
+    <div class="score-chip" style="background:var(--green);">Avg 3.2 / 5</div>
+  </div>
+  <div class="pillar-note">Fully scored — all 6 indicators (Tax, Basel AML, ODA, FDI, Remittances, Debt).</div>
+  <div class="indicators-grid">
+
+    <div class="card border3">
+      <div class="card-sub">Domestic · Tax</div>
+      <div class="card-title">Tax Revenue as % of GDP</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score3)">14.2%</span>
+          <span class="unit">of GDP (central govt, FY24/25)</span>
+        </div>
+        <div class="card-score-badge s3">3</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> ≥15% (IMF minimum); ≥20% strong. Total revenue incl. grants ≈19.4% of GDP.</div>
+      <div class="card-trend"><span class="trend-arrow trend-up">↑</span> Compensatory + comprehensive tax packages (gazetted May 2025) target ~+1pp by FY29/30</div>
+      <div class="card-conversation">The new tax package is now in force but delivers gradually. What administration measures under MTRS-2 will lock in the revenue gains before debt peaks in 2027?</div>
+      <div class="card-source">📊 <a href="https://www.imf.org/-/media/files/publications/cr/2025/english/1rwaea2025002-source-pdf.pdf" target="_blank">IMF Art. IV, CR 25/319, Table 2b (FY24/25)</a></div>
+    </div>
+
+    <div class="card border4">
+      <div class="card-sub">External · FDI</div>
+      <div class="card-title">FDI Net Inflows as % of GDP</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score4)">3.7%</span>
+          <span class="unit">of GDP ($560m, 2024)</span>
+        </div>
+        <div class="card-score-badge s4">4</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> ≥2% peer LMIC; ≥5% = strong diversified. Projected to rise with NKIA/RwandAir (Qatar Investment Authority) partnership.</div>
+      <div class="card-trend"><span class="trend-arrow trend-up">↑</span> Medium-term FDI expected to strengthen the balance of payments</div>
+      <div class="card-conversation">FDI is healthy but concentrated in strategic projects. What reforms (barriers to entry, market competition) would broaden greenfield FDI beyond flagship investments?</div>
+      <div class="card-source">📊 <a href="https://www.imf.org/-/media/files/publications/cr/2025/english/1rwaea2025002-source-pdf.pdf" target="_blank">IMF Art. IV, CR 25/319, Tables 6 &amp; 7</a></div>
+    </div>
+
+    <div class="card border2">
+      <div class="card-sub">Debt</div>
+      <div class="card-title">Public Debt as % of GDP</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score2)">75.0%</span>
+          <span class="unit">of GDP (2025, incl. guarantees)</span>
+        </div>
+        <div class="card-score-badge s2">2</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> &lt;55% sustainable; &gt;80% high risk. Peaks near 80% in 2027; ~89% of external debt is concessional/official.</div>
+      <div class="card-trend"><span class="trend-arrow trend-down">↓</span> Rising on NKIA financing; DSA: moderate risk of debt distress</div>
+      <div class="card-conversation">With debt peaking near the 65% anchor's ceiling, how is the smoother NKIA disbursement profile plus MTRS-2 consolidation expected to return debt to the 65% anchor by 2033?</div>
+      <div class="card-source">📊 <a href="https://www.imf.org/-/media/files/publications/cr/2025/english/1rwaea2025002-source-pdf.pdf" target="_blank">IMF Art. IV, CR 25/319, Table 1 &amp; DSA</a></div>
+    </div>
+
+    <div class="card border2">
+      <div class="card-sub">Domestic · Integrity of Flows</div>
+      <div class="card-title">Illicit Financial Flows — Risk (Basel AML Index)</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score2)">5.71</span>
+          <span class="unit">/ 10 risk (2025, rank 55/177)</span>
+        </div>
+        <div class="card-score-badge s2">2</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> &lt;3.0 low risk; 3.0–5.5 acceptable; 5.5–7.0 elevated. Higher = worse. Rwanda sits in the elevated band, though it is <strong>not on the FATF grey list</strong>.</div>
+      <div class="card-trend"><span class="trend-arrow trend-flat">→</span> ESAAMLG Mutual Evaluation (2024) &amp; updated ML/TF Risk Assessment driving beneficial-ownership + AML/CFT-strategy reforms (due 2026)</div>
+      <div class="card-conversation">Money-laundering risk is elevated despite FATF progress. Which of the five Basel domains (quality of AML framework, corruption, transparency) is dragging the score, and what reforms target it?</div>
+      <div class="card-source">📊 <a href="https://index.baselgovernance.org/ranking" target="_blank">Basel AML Index 2025 Public Edition (index.baselgovernance.org)</a></div>
+    </div>
+
+    <div class="card border4">
+      <div class="card-sub">External · ODA</div>
+      <div class="card-title">Net ODA Received as % of GNI</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score4)">9.9%</span>
+          <span class="unit">of GNI (2023)</span>
+        </div>
+        <div class="card-score-badge s4">4</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> &lt;5% low dependency; 5–10% moderate; &gt;20% vulnerability. Rwanda sits in the moderate band and is trending down as GNI grows.</div>
+      <div class="card-trend"><span class="trend-arrow trend-down">↓</span> Grants also fell 4.1%→2.9% of GDP (FY23/24→FY24/25); partners shifting from budget to project support</div>
+      <div class="card-conversation">Aid dependency is moderate and easing, but concessional finance is tightening globally. How is the transition to a more self-financed, blended model being sequenced against the debt peak?</div>
+      <div class="card-source">📊 <a href="https://data.worldbank.org/indicator/DT.ODA.ODAT.GN.ZS?locations=RW" target="_blank">World Bank WDI / OECD DAC, DT.ODA.ODAT.GN.ZS (2023)</a></div>
+    </div>
+
+    <div class="card border4">
+      <div class="card-sub">External · Remittances</div>
+      <div class="card-title">Remittances as % of GDP</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score4)">3.4%</span>
+          <span class="unit">of GDP (2024)</span>
+        </div>
+        <div class="card-score-badge s4">4</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> 3–10% = healthy range; 5 = growing + clear productive use, 4 = stable within range. Rwanda sits comfortably inside the healthy band.</div>
+      <div class="card-trend"><span class="trend-arrow trend-flat">→</span> Stable — a minor external flow for Rwanda relative to FDI and ODA</div>
+      <div class="card-conversation">Remittances are modest here. Is there scope to lower transfer costs (SDG 10.c target &lt;3%) and channel diaspora flows into productive investment vehicles?</div>
+      <div class="card-source">📊 <a href="https://data.worldbank.org/indicator/BX.TRF.PWKR.DT.GD.ZS?locations=RW" target="_blank">World Bank WDI, BX.TRF.PWKR.DT.GD.ZS (2024)</a></div>
+    </div>
+
+  </div>
+
+  <!-- PILLAR II: EXPENDITURE -->
+  <div class="section-header">
+    <div class="section-dot dot-exp"></div>
+    <h2>Pillar II — Expenditure</h2>
+    <div class="score-chip" style="background:var(--orange);">Avg 3.3 / 5</div>
+  </div>
+  <div class="pillar-note">Fully scored — all 3 indicators (Education, Government health, Debt service).</div>
+  <div class="indicators-grid">
+
+    <div class="card border4">
+      <div class="card-sub">Sectoral · Education</div>
+      <div class="card-title">Public Education Expenditure as % of GDP</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score4)">4.9%</span>
+          <span class="unit">of GDP (2023)</span>
+        </div>
+        <div class="card-score-badge s4">4</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> ≥4% (UNESCO/Incheon); ≥6% strong. Rwanda meets the UNESCO floor — a regional strength.</div>
+      <div class="card-trend"><span class="trend-arrow trend-flat">→</span> Stabilised near 5% after the 2021 COVID-driven surge (5.6%)</div>
+      <div class="card-conversation">Spending clears the UNESCO 4% floor — how is the focus shifting from inputs to learning outcomes and to expanding women's access to skills training (an IMF structural priority)?</div>
+      <div class="card-source">📊 <a href="https://data.worldbank.org/indicator/SE.XPD.TOTL.GD.ZS?locations=RW" target="_blank">World Bank / UNESCO UIS, SE.XPD.TOTL.GD.ZS (2023)</a></div>
+    </div>
+
+    <div class="card border3">
+      <div class="card-sub">Debt Sustainability</div>
+      <div class="card-title">Interest Payments as % of Government Revenue</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score3)">~11.6%</span>
+          <span class="unit">of revenue (FY24/25)</span>
+        </div>
+        <div class="card-score-badge s3">3</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> IMF DSF interest &lt;14.3% of revenue. S&amp;P projects interest ~10% of revenue over 2025–28 — low for the rating band.</div>
+      <div class="card-trend"><span class="trend-arrow trend-flat">→</span> Contained by concessional debt structure; rises as commercial borrowing grows</div>
+      <div class="card-conversation">Interest costs are moderate thanks to concessional debt. As NKIA adds commercial borrowing, how will the debt-service profile evolve and what refinancing risks arise?</div>
+      <div class="card-source">📊 <a href="https://www.imf.org/-/media/files/publications/cr/2025/english/1rwaea2025002-source-pdf.pdf" target="_blank">IMF Art. IV, CR 25/319, Table 2a/2b (interest ÷ revenue)</a></div>
+    </div>
+
+    <div class="card border3">
+      <div class="card-sub">Sectoral · Health</div>
+      <div class="card-title">Public Health Expenditure as % of GDP</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score3)">~2.4%</span>
+          <span class="unit">of GDP (govt-financed, WHO GHED)</span>
+        </div>
+        <div class="card-score-badge s3">3</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> ≥5% (WHO); ≥15% of budget (Abuja). This is the <em>government-financed</em> share (GGHE-D); total current health spend is higher at 5.1% of GDP once donors &amp; households are included.</div>
+      <div class="card-trend"><span class="trend-arrow trend-flat">→</span> Out-of-pocket costs cut to ~10% of health spending via community-based health insurance (CBHI) — a genuine strength</div>
+      <div class="card-conversation">Government health financing (~2.4% of GDP) is well below the WHO 5% and Abuja 15%-of-budget marks. What is the roadmap to raise the public share as donor support tightens?</div>
+      <div class="card-source">📊 <a href="https://data.worldbank.org/indicator/SH.XPD.GHED.GD.ZS?locations=RW" target="_blank">WHO GHED, SH.XPD.GHED.GD.ZS (GGHE-D as % GDP)</a></div>
+    </div>
+
+  </div>
+
+  <!-- PILLAR III: SPENDING EFFECTIVENESS -->
+  <div class="section-header">
+    <div class="section-dot dot-eff"></div>
+    <h2>Pillar III — Spending Effectiveness</h2>
+    <div class="score-chip" style="background:var(--purple);">Avg 4.0 / 5</div>
+  </div>
+  <div class="pillar-note">This pillar rests on a single indicator (PEFA). The score is a <strong>qualitative</strong> read of Rwanda's recent PEFA and PFM reforms, pending conversion of the full indicator-level PEFA scores.</div>
+  <div class="indicators-grid">
+
+    <div class="card border4">
+      <div class="card-sub">PFM Quality</div>
+      <div class="card-title">PEFA Score — Overall PFM Quality</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Assessment</span>
+          <span class="value" style="color:var(--score4);font-size:19px;">2022 PEFA</span>
+          <span class="unit">recent · strong (qualitative)</span>
+        </div>
+        <div class="card-score-badge s4">4</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> B or above = adequate. Rwanda is a recognised regional PFM leader; sound public-investment-management framework and revenue administration in both 2016 &amp; 2022 assessments.</div>
+      <div class="card-trend"><span class="trend-arrow trend-up">↑</span> 2025 Fiscal Transparency Evaluation found improvements; PFM digitalisation strategy (incl. AI) adopted Apr 2025; IFMIS project module rolling out</div>
+      <div class="card-conversation">A downgrade in the FTE flagged the loss of administrative classification in fiscal reporting. How is the GFS Action Plan restoring timely quarterly budget-execution reporting?</div>
+      <div class="card-source">📊 <a href="https://www.pefa.org/" target="_blank">PEFA Secretariat (Rwanda 2022) · IMF Art. IV FTE, Aug 2025 — <em>qualitative score, letter-grade conversion pending</em></a></div>
+    </div>
+
+  </div>
+
+  <!-- PILLAR IV: ENABLING ENVIRONMENT -->
+  <div class="section-header">
+    <div class="section-dot dot-env"></div>
+    <h2>Pillar IV — Enabling Environment</h2>
+    <div class="score-chip" style="background:var(--teal);">Avg 3.5 / 5</div>
+  </div>
+  <div class="pillar-note">Scored on 6 of 7 indicators (Rule of Law, Regulatory Quality, CPI, three B-READY pillars). INFF status is shown qualitatively (no 1–5 score).</div>
+  <div class="indicators-grid">
+
+    <div class="card border3">
+      <div class="card-sub">Governance</div>
+      <div class="card-title">Rule of Law Index (WGI)</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score3)">+0.10</span>
+          <span class="unit">(−2.5 to +2.5 scale, 2024)</span>
+        </div>
+        <div class="card-score-badge s3">3</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> ≥0.0 global median; ≥0.5 strong. Rwanda was the <strong>highest-scoring low-income country</strong> on Rule of Law in 2024.</div>
+      <div class="card-trend"><span class="trend-arrow trend-flat">→</span> Positive and rare for the income group (2023: +0.21 pre-methodology revision)</div>
+      <div class="card-conversation">Rwanda leads its income group on rule of law. How can contract-enforcement and commercial-justice depth be strengthened to convert this into higher private investment?</div>
+      <div class="card-source">📊 <a href="https://info.worldbank.org/governance/wgi/" target="_blank">World Bank WGI, RL.EST (2024)</a></div>
+    </div>
+
+    <div class="card border4">
+      <div class="card-sub">Governance · Integrity</div>
+      <div class="card-title">Corruption Perceptions Index (CPI)</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score4)">57 / 100</span>
+          <span class="unit">Rank 43/180 (2024)</span>
+        </div>
+        <div class="card-score-badge s4">4</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> ≥50 acceptable; ≥65 strong. Rwanda's highest-ever score; 3rd in Sub-Saharan Africa, 1st in East Africa.</div>
+      <div class="card-trend"><span class="trend-arrow trend-up">↑</span> Up from 53 (2023); rose further to 58 in the 2025 CPI</div>
+      <div class="card-conversation">Rwanda's control of corruption is a genuine comparative advantage. How is this being leveraged in donor dialogue to unlock blended and private climate finance?</div>
+      <div class="card-source">📊 <a href="https://www.transparency.org/en/countries/rwanda" target="_blank">Transparency International, CPI 2024</a></div>
+    </div>
+
+    <div class="card border4">
+      <div class="card-sub">Business Environment</div>
+      <div class="card-title">B-READY — Pillar 1: Regulatory Framework</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score4)">70.4</span>
+          <span class="unit">/ 100 (2024, rank 17th)</span>
+        </div>
+        <div class="card-score-badge s4">4</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> ≥70 enabling; ≥85 best practice. Top performer in Sub-Saharan Africa in the inaugural B-READY edition.</div>
+      <div class="card-trend"><span class="trend-arrow trend-up">↑</span> Anchored by continued legal reform (e.g. 2021 Investment Promotion Law)</div>
+      <div class="card-conversation">Rwanda's regulatory framework clears the enabling threshold. Which remaining rules (insolvency, competition) most constrain private-sector entry and scale-up?</div>
+      <div class="card-source">📊 <a href="https://www.worldbank.org/en/businessready" target="_blank">World Bank Business Ready (B-READY) 2024</a></div>
+    </div>
+
+    <div class="card border3">
+      <div class="card-sub">Business Environment</div>
+      <div class="card-title">B-READY — Pillar 2: Public Services</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score3)">67.4</span>
+          <span class="unit">/ 100 (2024, rank 8th)</span>
+        </div>
+        <div class="card-score-badge s3">3</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> ≥70 adequate; ≥85 strong. Digitised public services (IECMS judiciary, e-titles land) drive strong global rank despite score just below threshold.</div>
+      <div class="card-trend"><span class="trend-arrow trend-up">↑</span> Digitalisation cutting time &amp; cost of doing business</div>
+      <div class="card-conversation">Rwanda ranks 8th globally on public services yet sits just under 70. Which utility or trade-facilitation services offer the fastest gains to cross into the "adequate" band?</div>
+      <div class="card-source">📊 <a href="https://www.worldbank.org/en/businessready" target="_blank">World Bank Business Ready (B-READY) 2024</a></div>
+    </div>
+
+    <div class="card border4">
+      <div class="card-sub">Business Environment</div>
+      <div class="card-title">B-READY — Pillar 3: Operational Efficiency</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score4)">81.3</span>
+          <span class="unit">/ 100 (2024, rank 3rd)</span>
+        </div>
+        <div class="card-score-badge s4">4</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> ≥70 efficient; ≥85 best practice. 3rd globally — among the fastest countries for company registration.</div>
+      <div class="card-trend"><span class="trend-arrow trend-up">↑</span> A standout global result; near best-practice band</div>
+      <div class="card-conversation">Operational efficiency is world-class. How is this being marketed to investors as a differentiator versus regional peers to attract export-oriented FDI?</div>
+      <div class="card-source">📊 <a href="https://www.worldbank.org/en/businessready" target="_blank">World Bank Business Ready (B-READY) 2024</a></div>
+    </div>
+
+    <div class="card gap">
+      <div class="card-sub">Policy · Strategy</div>
+      <div class="card-title">National FfD / INFF Framework</div>
+      <span class="gap-chip">Qualitative · no score</span>
+      <div class="gap-body">Rwanda has strong, costed national planning — the <strong>Second National Strategy for Transformation (NST-2, 2024–29)</strong> and Vision 2050 — plus Climate Budget Tagging, Gender Budget Tagging and a PFM digitalisation strategy. Whether a formal, operational Integrated National Financing Framework (INFF) is in place was not verified for this build.</div>
+      <div class="gap-need">UN DESA / UNDP INFF status confirmation (financing.desa.un.org, inff.org)</div>
+    </div>
+
+    <div class="card border3">
+      <div class="card-sub">Governance</div>
+      <div class="card-title">Regulatory Quality (WGI)</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score3)">+0.27</span>
+          <span class="unit">(−2.5 to +2.5 scale, 2024)</span>
+        </div>
+        <div class="card-score-badge s3">3</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> ≥0.0 global median; ≥0.5 conducive to private sector. Rwanda ranks 69/193 globally — positive and among the strongest in Sub-Saharan Africa.</div>
+      <div class="card-trend"><span class="trend-arrow trend-up">↑</span> Positive, consistent with the strong B-READY regulatory-framework score of 70.4</div>
+      <div class="card-conversation">Regulatory quality is a regional strength but sits below the 0.5 "strong" mark. Which regulatory bottlenecks (competition, insolvency, sector licensing) would most raise the score?</div>
+      <div class="card-source">📊 <a href="https://info.worldbank.org/governance/wgi/" target="_blank">World Bank WGI, RQ.EST (2024)</a></div>
+    </div>
+
+  </div>
+
+  <!-- PILLAR V: FINANCIAL MARKET DIAGNOSTICS -->
+  <div class="section-header">
+    <div class="section-dot dot-fin"></div>
+    <h2>Pillar V — Financial Market Diagnostics</h2>
+    <div class="score-chip" style="background:var(--indigo);">Avg 4.0 / 5</div>
+  </div>
+  <div class="indicators-grid">
+
+    <div class="card border3">
+      <div class="card-sub">Risk Premium</div>
+      <div class="card-title">Sovereign Credit Rating</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score3)">B+</span>
+          <span class="unit">S&amp;P / Fitch · B2 Moody's · Stable</span>
+        </div>
+        <div class="card-score-badge s3">3</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> BBB− investment grade; BB−/BB sub-IG with access. Fitch revised outlook to Stable (Mar 2026); S&amp;P affirmed B+ Stable (May 2025).</div>
+      <div class="card-trend"><span class="trend-arrow trend-up">↑</span> Outlook improved to Stable on easing external-financing risk</div>
+      <div class="card-conversation">Fitch's move to Stable reflects secured financing and easing regional tension. What would it take to reach the BB band, and how does market access price the NKIA borrowing?</div>
+      <div class="card-source">📊 <a href="https://tradingeconomics.com/rwanda/rating" target="_blank">S&amp;P (May 2025) · Fitch (Mar 2026) · Moody's</a></div>
+    </div>
+
+    <div class="card border5">
+      <div class="card-sub">Private Finance</div>
+      <div class="card-title">Domestic Credit to Private Sector as % of GDP</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score5)">~22%</span>
+          <span class="unit">of GDP (2024, computed)</span>
+        </div>
+        <div class="card-score-badge s5">5</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> ≥15% (IMF norm); ≥20% strong. Private credit grew ~14–15% in 2024–25H1 (trade, construction, mortgages).</div>
+      <div class="card-trend"><span class="trend-arrow trend-up">↑</span> Rapid, sustained credit expansion — IMF flags monitoring of retail leverage</div>
+      <div class="card-conversation">Credit is growing fast. With the IMF recommending LTV/DSTI limits, how is macroprudential policy keeping pace to avoid future asset-quality deterioration?</div>
+      <div class="card-source">📊 <a href="https://www.imf.org/-/media/files/publications/cr/2025/english/1rwaea2025002-source-pdf.pdf" target="_blank">Computed from IMF Art. IV Table 3 (private credit ÷ GDP), 2024</a></div>
+    </div>
+
+    <div class="card border5">
+      <div class="card-sub">Financial Sector Health</div>
+      <div class="card-title">Non-Performing Loans (NPL) Ratio</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score5)">2.6%</span>
+          <span class="unit">of bank loans (2025H1)</span>
+        </div>
+        <div class="card-score-badge s5">5</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> &lt;5% healthy; &gt;20% systemic risk. Well below the prudential threshold; MFI NPLs ~3.4%.</div>
+      <div class="card-trend"><span class="trend-arrow trend-up">↑</span> Improved from 3.1% (end-2024) to 2.6% (2025H1)</div>
+      <div class="card-conversation">Asset quality is strong today, but credit is growing fast and large SOE exposures create a bank-sovereign nexus. What borrower-level stress testing is in place?</div>
+      <div class="card-source">📊 <a href="https://www.imf.org/-/media/files/publications/cr/2025/english/1rwaea2025002-source-pdf.pdf" target="_blank">IMF Art. IV, CR 25/319 · NBR (2025H1)</a></div>
+    </div>
+
+    <div class="card border5">
+      <div class="card-sub">Financial Sector Health</div>
+      <div class="card-title">Customer Deposits to Loans Ratio</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score5)">~115%</span>
+          <span class="unit">deposits ÷ private loans (2024)</span>
+        </div>
+        <div class="card-score-badge s5">5</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> ≥80% stable deposit-funded lending. Liquidity coverage ~337% (Q1 2025); financial inclusion at 96%.</div>
+      <div class="card-trend"><span class="trend-arrow trend-up">↑</span> Deposit-funded, highly liquid — driven by strong deposit growth</div>
+      <div class="card-conversation">Ample deposit funding underpins stability. Is that liquidity being intermediated into long-tenor finance for infrastructure, or parked in government securities?</div>
+      <div class="card-source">📊 <a href="https://www.imf.org/-/media/files/publications/cr/2025/english/1rwaea2025002-source-pdf.pdf" target="_blank">Computed from IMF Art. IV Table 3 · NBR liquidity data</a></div>
+    </div>
+
+    <div class="card border5">
+      <div class="card-sub">Financial Sector Health</div>
+      <div class="card-title">Bank Capital Adequacy Ratio</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score5)">~22%</span>
+          <span class="unit">total CAR (Q1 2025)</span>
+        </div>
+        <div class="card-score-badge s5">5</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> ≥15% NBR minimum (Basel-aligned). Regulatory capital well above minimum; ROE ~19–20%.</div>
+      <div class="card-trend"><span class="trend-arrow trend-up">↑</span> ~20.5–22% through 2024–25 vs 15% minimum</div>
+      <div class="card-conversation">Capital is comfortably above the minimum, but the IMF suggests Pillar-2 buffers given large exposures. How is capital being pre-positioned against SOE and climate risk?</div>
+      <div class="card-source">📊 <a href="https://www.bnr.rw/" target="_blank">National Bank of Rwanda, FSS (2025). <em>Note: regulatory (risk-weighted) CAR, not the WDI unweighted capital-to-assets series.</em></a></div>
+    </div>
+
+    <div class="card border2">
+      <div class="card-sub">Debt Sustainability</div>
+      <div class="card-title">External Debt Stocks as % of GNI</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score2)">91.3%</span>
+          <span class="unit">of GNI (2024)</span>
+        </div>
+        <div class="card-score-badge s2">2</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> &lt;30% low risk; 30–50% moderate; 50–70% elevated; 70–100% high risk. About <strong>89% of external debt is official/concessional</strong> (Fitch), which softens rollover risk even at this stock level.</div>
+      <div class="card-trend"><span class="trend-arrow trend-down">↓</span> High and rising — external debt stock reached ~$13.1bn in 2024, up from ~$11.4bn in 2023, driven by NKIA airport financing</div>
+      <div class="card-conversation">External debt is now high relative to GNI, even though most of it is concessional. What's the ceiling the government and IMF are managing toward as NKIA-related borrowing continues?</div>
+      <div class="card-source">📊 <a href="https://data.worldbank.org/indicator/DT.DOD.DECT.GN.ZS?locations=RW" target="_blank">World Bank WDI / IDS, DT.DOD.DECT.GN.ZS (2024)</a></div>
+    </div>
+
+    <div class="card border4">
+      <div class="card-sub">Private Sector Constraints</div>
+      <div class="card-title">% Firms Fully Credit Constrained</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score4)">13.9%</span>
+          <span class="unit">of firms (2023)</span>
+        </div>
+        <div class="card-score-badge s4">4</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> &lt;10% well-functioning; 10–19% = good; &gt;30% severe constraint. Down sharply from 16.7% (2019).</div>
+      <div class="card-trend"><span class="trend-arrow trend-up">↑</span> Improving — financial inclusion at 96% supports broader access, though SME credit remains tighter than headline suggests</div>
+      <div class="card-conversation">Fewer firms are fully shut out of credit than five years ago. What's driving the remaining 14% — collateral requirements, credit history, or sector-specific risk aversion by lenders?</div>
+      <div class="card-source">📊 <a href="https://data.worldbank.org/indicator/IC.FRM.CRDC.FL.ZS?locations=RW" target="_blank">World Bank Enterprise Surveys, IC.FRM.CRDC.FL.ZS (2023)</a></div>
+    </div>
+
+    <div class="card border3">
+      <div class="card-sub">Private Sector Constraints</div>
+      <div class="card-title">% Firms Citing Unfavourable Loan Conditions</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score3)">31.3%</span>
+          <span class="unit">of firms (2023)</span>
+        </div>
+        <div class="card-score-badge s3">3</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> &lt;15% = 5; 26–35% = 3; &gt;50% = 1. Share of firms naming unfavourable rates, collateral or procedures as the main reason for not applying for a loan.</div>
+      <div class="card-trend"><span class="trend-arrow trend-flat">→</span> Nearly a third of firms are deterred by loan terms — consistent with high lending rates and heavy collateral norms</div>
+      <div class="card-conversation">Loan conditions deter a third of firms even as outright credit exclusion falls. Would movable-collateral registries, credit-guarantee schemes, or rate competition move the needle most?</div>
+      <div class="card-source">📊 <a href="https://data360.worldbank.org/en/indicator/WB_ES_T_BREADY_FIN26?country=RWA" target="_blank">World Bank Data360, WB_ES_T_BREADY_FIN26 (2023)</a></div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <p><strong>Primary source:</strong> IMF, <em>Rwanda: 2025 Article IV Consultation and Sixth Review Under the PCI</em>, Country Report No. 25/319 (Nov 14, 2025). Supplementary indicators drawn from publicly available international databases: World Bank WDI &amp; WGI, World Bank Business Ready (B-READY 2024), Transparency International CPI 2024, PEFA Secretariat, WHO GHED, S&amp;P/Fitch/Moody's, and the National Bank of Rwanda. Scores (1–5) reflect assessment against fixed international benchmarks for the FY2024/25 reference period.</p>
+  <p style="margin-top:8px;"><strong>Methodology &amp; caveats:</strong> 24 of 25 indicators carry a directly-sourced score; the one exception is the INFF (qualitative status, shown as a narrative card). The IMF Financial Development Index was retired from the framework (data stale post-2020), giving 25 indicators. The external-debt-stocks indicator (Pillar V) was corrected in this build — it had been mislabeled "average maturity (years)" with an un-inverted scoring formula; it now reads External Debt Stocks (% of GNI, 91.3% for Rwanda — high, though concessional-heavy) with bands running the intuitive direction (lower = better), consistent with the corrected master framework. Pillar and overall averages exclude the unscored INFF. The overall score (3.6) is <strong>Provisional</strong> because PEFA is a qualitative read pending indicator-level conversion. Two Pillar-V ratios (private credit/GDP, deposits/loans) are computed from IMF monetary-survey tables and labelled as such.</p>
+  <p style="margin-top:8px;"><strong>Intended use:</strong> A structured conversation starter for donor–government dialogue on FfD priorities — not an official government document or a cross-country ranking. Verify against primary sources before use in formal assessments.</p>
+</div>
+
+</body></html>
